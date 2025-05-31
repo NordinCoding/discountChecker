@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+    <div id="register-div" class="centered-div">
+        <form id="registration-form" action="/register" method="POST">
+            <div id="register-input" class="centered-input">
+                <h1 id="register-head">Create Account</h1>
+                <br>
+                <input class="username-input" id="username" type="text" name="username" placeholder="Username">
+                <br>
+                <input class="password-input" id="password" type="password" name="password" placeholder="Password">
+                <br>
+                <input class="password-input" id="confirmation" type="password" name="confirmation" placeholder="Confirm Password">
+                <br>
+                <button class="button" id = "register-button" type="SUBMIT">Create account</button>
+            </div>
+        </form>
+        <div id="register-feedback-msg"></div>
+    </div>
+
+    <script>
+
+        async function checkUsername(username) {
+            const response = await fetch('/check_username', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: username })
+            });
+            const data = await response.json();
+            return data;
+        }
+
+
+        // Add an event listener to the register button to check for username field input
+        document.getElementById('registration-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            let isValid = true;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmation = document.getElementById('confirmation').value;
+            const messageDiv = document.getElementById('register-feedback-msg');
+            const submitButton = document.getElementById('register-button');
+
+            const validUsername = /^[0-9A-Za-z]{6,16}$/;
+            const validPassword = /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/;
+            
+
+            let response = await checkUsername(username);
+            if (response.exists) {
+                messageDiv.innerHTML = "Username is already in use";
+                fadeOut(messageDiv, submitButton)
+                isValid = false;
+            }
+
+            if (username.length == 0 || password.length == 0 || confirmation.length == 0) {
+                messageDiv.innerHTML = "All fields must be filled out";
+                fadeOut(messageDiv, submitButton)
+                isValid = false;
+            } else if (!validUsername.test(username)) {
+                messageDiv.innerHTML = "Username must be between 6 and 16 characters long and contain only letters and numbers";
+                fadeOut(messageDiv, submitButton)
+                isValid = false;
+            } else if (!validPassword.test(password)) {
+                messageDiv.innerHTML = "Password must be between 8 and 32 characters long, contain at least 1 upper and 1 lower case letter, 1 number and 1 special character";
+                fadeOut(messageDiv, submitButton)
+                isValid = false;
+            } else if (password != confirmation) {
+                messageDiv.innerHTML = "Passwords do not match";
+                fadeOut(messageDiv, submitButton)
+                isValid = false;
+            }
+
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
+
+{% endblock %}

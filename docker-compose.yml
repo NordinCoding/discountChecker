@@ -1,0 +1,55 @@
+services:
+  web:
+    build: .
+    container_name: discountChecker
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - flask_session:/app/flask_session
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Amsterdam
+    
+  db:
+    image: mysql:8.0
+    container_name: discountChecker_db
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=SQLPassword
+      - MYSQL_DATABASE=discountChecker
+      - MYSQL_PASSWORD=SQLPassword
+      - MYSQL_ROOT_HOST='%'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:alpine
+    container_name: discountChecker_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  celery-worker:
+    build: .
+    command: celery -A app.celery worker --concurrency=1 --loglevel=INFO
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Amsterdam
+      
+
+volumes:
+  mysql_data:
+  flask_session:

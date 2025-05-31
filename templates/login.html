@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+    <div id="login-div" class="centered-div">
+        <form id="login-form" action="/login" method="POST">
+            <div id="login-input" class="centered-input">
+                <h1 id="login-head">Login</h1>
+                <br>
+                <input class="username-input" id="login-username" type="text" name="username" placeholder="Username">
+                <br>
+                <input class="password-input" id="login-password" type="password" name="password" placeholder="Password">
+                <br>
+                <button class="button" id="login-button" type="SUBMIT">Login</button>
+            </div>
+        </form>
+        <div id="login-feedback-msg"></div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username:document.getElementById('login-username').value, 
+                                    password:document.getElementById('login-password').value})
+                });
+                const data = await response.json();
+                
+                if (data.success === false) {
+                    messageDiv = document.getElementById("login-feedback-msg");
+                    messageDiv.innerHTML = data.message;
+                    fadeOut(messageDiv, 
+                            document.getElementById('login-button'))
+                }
+                else {
+                    window.location.replace(data.redirect);
+                }
+        })
+
+    </script>
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,311 @@
+/* Index.html */
+
+body {
+    background-color: #f1eadd;
+}
+
+.custom-navbar {
+    background-color: #4a5d23d1;
+}
+
+
+/* PRODUCT TABLE */
+
+
+#product-table-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#product-table {
+    position: absolute;
+    width: 40%;
+    top: 35%;
+    border-spacing: 0;
+    border-collapse: separate;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: left;
+}
+
+#empty-body {
+    text-align: center;
+}
+
+
+th {
+    background-color: #e8dcc8;
+    border-bottom: 1px solid;
+    
+}
+
+.name-head {
+    padding-left: 5px;
+    border-top-left-radius: 10px;
+}
+
+.savings-head {
+    border-top-right-radius: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #e8dcc8;
+}
+
+.savings-up, .savings-down {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.product-name-td {
+    height: 50px;
+    padding-right: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.current-price, .og-price, .savings-up, .savings-down {
+    text-align: center;
+    border-left: 1px solid black;
+}
+
+.savings-up {
+    color: rgb(0, 130, 0);
+}
+
+#product-table-head {
+    border: 1px solid black;
+}
+
+.price-head {
+    border-left: 1px solid black;
+    text-align: center;
+    width: 12%;
+}
+
+.product-name-td a {
+    max-width: 500px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    padding-left: 5px;
+    color: black;
+    text-decoration: none;
+}
+
+.product-name-td a:hover {
+    text-decoration: underline;
+}
+
+.current-price {
+    width: 10%;
+}
+
+.og-price {
+    width: 10%;
+}
+
+.savings {
+    width: 10%;
+}
+
+#empty-table-row {
+    text-align: center;
+    height: 50px;
+}
+
+#input-box-div {
+    display: flex;
+    justify-content: center;
+}
+
+#add_product-form {
+    position: absolute;
+    width: 1000px;
+    top: 17%;
+}
+
+#button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#insert-message-div {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    background-color: #f9f7f2;
+    border: 1px solid black;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 10px;
+}
+
+#supported-websites-div {
+    position: absolute;
+    top: 15%;
+    left: 60%;
+    text-align: center;
+}
+
+#bol-link {
+    color: black;
+    text-decoration: none;
+}
+
+#bol-link:hover {
+    text-decoration: underline;
+}
+
+#URL-input {
+    width: 300px;
+}
+
+#insert-message {
+    position: absolute;
+    top: 13%;
+}
+
+#feedback-message {
+    position: absolute;
+    top: 22.5%;
+    transition: opacity 1s ease-out;
+}
+
+.button {
+    background-color: #4a5d236e;
+    border: 2px solid black;
+    border-radius: 30px;
+}
+
+.button:hover {
+   background-color: #4a5d23ac;
+}
+
+#submit-btn {
+    position: absolute;
+    top: 120%;
+    width: 10%;
+}
+
+.remove-btn {
+    float: right;
+    font-size: 90%;
+    width: 12%;
+}
+
+.spinner-image {
+    position: absolute;
+    left: 66%;
+    top: 10%;
+    width: 2%;
+    animation: rotation 1.5s infinite linear;
+}
+
+#loading-spinner {
+    visibility: hidden;
+}
+
+#loadingSpinner.visible {
+    visibility: visible;
+}
+
+@keyframes rotation {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#insert-message {
+    font-size: 115%;
+}
+
+/* REGISTER.HTML */
+
+.centered-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#username {
+    position: absolute;
+    top: 17%;
+}
+
+#password {
+    position: absolute;
+    top: 19.5%;
+}
+
+#confirmation {
+    position: absolute;
+    top: 22%;
+}
+
+#register-button {
+    position: absolute;
+    top: 25.5%;
+}
+
+#register-head {
+    position: absolute;
+    top: 11.5%;
+    color: Black;
+}
+
+#register-feedback-msg {
+    position: absolute;
+    top: 28.5%;
+    transition: opacity 1s ease-out;
+    color: red;
+}
+
+/* REGISTER.HTML */
+
+
+
+/* LOGIN.HTML */
+
+#login-head {
+    position: absolute;
+    top: 11.5%;
+    color: black;
+}
+
+#login-username {
+    position: absolute;
+    top: 17%;
+}
+
+#login-password {
+    position: absolute;
+    top: 19.5%;
+}
+
+#login-button {
+    position: absolute;
+    top: 23%;
+}
+
+#login-feedback-msg {
+    position: absolute;
+    top: 26%;
+    transition: opacity 1s ease-out;
+    color: red;
+}
+
+/* LOGIN.HTML */
+
+
+
