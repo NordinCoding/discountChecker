@@ -1,6 +1,2 @@
-import datetime
-
-
-timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-print(timestamp)
+for i in range (0, 2):
+    print("test")

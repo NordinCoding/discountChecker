@@ -1,0 +1,28 @@
+2025-06-01 13:19:54 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-01 13:24:11 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-01 13:24:40 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-01 13:27:15 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-01 13:27:34 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-01 13:34:09 - ERROR - User ID: None - Error while rescraping product, trying again: 'currentPrice'
+2025-06-02 16:46:52 - ERROR - User ID: None - Requested rescrape failed, retrying: Failed to scrape product data/alter product data
+2025-06-02 17:20:56 - INFO - User ID: None - App started
+2025-06-02 17:21:07 - INFO - User ID: None - App started
+2025-06-02 17:34:00 - ERROR - User ID: None - Requested rescrape failed, retrying: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-02 17:39:20 - ERROR - User ID: None - Requested rescrape failed, retrying: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-04 16:17:40 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-04 16:18:18 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-04 16:30:58 - ERROR - User ID: 1 -  API request error: Failed to scrape product data/alter product data
+2025-06-04 16:30:58 - ERROR - User ID: 1 -  Error processing product data: https://www.bol.com/nl/nl/p/nintendo-switch-2-pro-controller-zwart/9300000228511367/?bltgh=ae94a2fe-b871-4110-9d56-4c2f0c2c9882.topPicksForYou.product-tile-9300000228511367.ProductImage&promo=main_862_top_picks_for_you___product_2_9300000228511367
+2025-06-04 16:32:18 - ERROR - User ID: 1 -  API request error: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-04 16:32:18 - ERROR - User ID: 1 -  Error processing product data: https://www.bol.com/nl/nl/p/nintendo-switch-2-pro-controller-zwart/9300000228511367/?bltgh=ae94a2fe-b871-4110-9d56-4c2f0c2c9882.topPicksForYou.product-tile-9300000228511367.ProductImage&promo=main_862_top_picks_for_you___product_2_9300000228511367
+2025-06-04 16:33:42 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-04 16:33:46 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-04 16:34:16 - ERROR - User ID: 1 -  API request error: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-04 16:34:16 - ERROR - User ID: 1 -  Error processing product data: https://www.bol.com/nl/nl/p/nintendo-switch-2-pro-controller-zwart/9300000228511367/?bltgh=98eb5c3a-96c8-4f8f-bf1d-bb2ecbd5a276.topPicksForYou.product-tile-9300000228511367.ProductImage&promo=main_862_top_picks_for_you___product_2_9300000228511367
+2025-06-04 16:35:11 - ERROR - User ID: 1 -  API request error: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-04 16:35:11 - ERROR - User ID: 1 -  Error processing product data: https://www.bol.com/nl/nl/p/nintendo-switch-2-pro-controller-zwart/9300000228511367/?bltgh=98eb5c3a-96c8-4f8f-bf1d-bb2ecbd5a276.topPicksForYou.product-tile-9300000228511367.ProductImage&promo=main_862_top_picks_for_you___product_2_9300000228511367
+2025-06-04 16:51:33 - ERROR - User ID: 1 -  API request error: {'error': 'Failed to scrape product data/alter product data', 'details': 'Page.wait_for_selector: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator("[class=\\"promo-price\\"]") to be visible\n'}
+2025-06-04 16:51:33 - ERROR - User ID: 1 -  Error processing product data: https://www.bol.com/nl/nl/p/nintendo-switch-2-pro-controller-zwart/9300000228511367/?bltgh=98eb5c3a-96c8-4f8f-bf1d-bb2ecbd5a276.topPicksForYou.product-tile-9300000228511367.ProductImage&promo=main_862_top_picks_for_you___product_2_9300000228511367
+2025-06-06 00:58:44 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-06 00:58:49 - ERROR - User ID: 1 -  Invalid URL: 
+2025-06-06 00:58:54 - ERROR - User ID: 1 -  Invalid URL: 

@@ -1,7 +1,8 @@
 from modules.models import User, UserProduct, Product, db
 from modules.helpers import log_to_file
 from flask import jsonify
-
+import requests
+import time
 
 def store_product(dictValues, URL, user_id):
     '''
@@ -15,9 +16,13 @@ def store_product(dictValues, URL, user_id):
     
     '''
     try:
+        # Extract only neccessary parts of the URL to keep it consistent for future checking
+        url_last_slash = URL.rfind('/')
+        new_URL = URL[:url_last_slash]
+        
         # Create product object to store it in the products table
         product = Product(
-            URL=URL,
+            URL=new_URL,
             name=dictValues["name"],
             ogPrice=dictValues["ogPrice"],
             currentPrice=dictValues["currentPrice"]
@@ -83,3 +88,50 @@ def check_product_existence(URL, product_id, user_id):
         db.session.commit()
         log_to_file(f"Product already in products table, added to userProducts table: {product_id}", "INFO", user_id)
         return False
+    
+    
+    
+'''
+
+SCRAPER MODULES
+
+'''
+
+def rescrape_once(URL, product_id):
+    log_to_file(f"Requesting rescrape of product: {product_id}")
+    
+    try:
+        response = requests.get(f"http://136.144.172.186/scrape?url={URL}")
+        response.raise_for_status()
+        dict_values = response.json()
+        return dict_values
+        
+    except requests.exceptions.RequestException as e:
+        log_to_file(f"Error while rescraping product, trying again: {e}", "ERROR")
+        return {'error': e}
+
+
+
+def retry_scrape(URL, product_id):
+    
+    # Request API in loop to retry the scrape twice
+    for i in range (0, 2):
+        
+        if i == 0:
+            log_to_file(f"1st retry on product: {product_id}")
+        else:
+            log_to_file(f"2nd retry on product: {product_id}")
+        
+        dict_values = rescrape_once(URL, product_id)
+        
+        # if dict_values contains the key 'currentPrice' it was successful,
+        # return dict_values that contains product data
+        if dict_values.get('currentPrice'):
+            return dict_values
+        
+        # if loop is on second try and doesnt contain the key 'currentPrice',
+        # the scraping failed twice, return dict_values that contains error message
+        if i == 1:
+            return dict_values
+            
+        time.sleep(2)

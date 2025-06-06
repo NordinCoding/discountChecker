@@ -24,7 +24,7 @@ def log_to_file(message, level="INFO", user_id=None):
     '''
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # Use user_id if available to identify specific users in logs
     if user_id:
         user_string = f"User ID: {user_id} - "
@@ -32,7 +32,13 @@ def log_to_file(message, level="INFO", user_id=None):
         user_string = f"User ID: None -"
     
     log_entry = f"{timestamp} - {level} - {user_string} {message}\n"
-
-    # Write the log entry to the log file
+    
+    # If log level is error, write error to both files for easier debugging.
+    # Otherwise write only to the regular usage logs
+    if level == "ERROR":
+        with open("scraper_errors.txt", "a", encoding="utf-8") as file:
+            file.write(log_entry)
+    
     with open("scraper_logs.txt", "a", encoding="utf-8") as file:
         file.write(log_entry)
+            

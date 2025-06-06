@@ -22,7 +22,10 @@ def create_app():
     app.config["--no-reload"] = False
     app.config["TEMPLATES_AUTO_RELOAD"] = True
     app.config["CELERY"] = {"broker_url": os.getenv("BROKER_URL"),
-                            "result_backend": os.getenv("RESULT_BACKEND")}
+                            "result_backend": os.getenv("RESULT_BACKEND"),
+                            "task_default_queue": "default",
+                            "timezone": "Europe/Amsterdam",
+                            "enable_utc": False}
 
     Session(app)
     db.init_app(app)

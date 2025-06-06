@@ -37,9 +37,33 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
-  celery-worker:
+  celery-worker-user:
     build: .
-    command: celery -A app.celery worker --concurrency=1 --loglevel=INFO
+    command: celery -A app.celery worker --concurrency=1 --loglevel=INFO --queues=user_requests
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Amsterdam
+
+  celery-worker-scheduled:
+    build: .
+    command: celery -A app.celery worker --concurrency=1 --loglevel=INFO --queues=scheduled_task
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Amsterdam
+
+  celery-beat:
+    build: .
+    command: celery -A modules.celery_app.celery beat --loglevel=INFO
     depends_on:
       - redis
       - db

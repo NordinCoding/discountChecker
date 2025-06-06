@@ -6,7 +6,7 @@ from modules.helpers import login_required, log_to_file
 from waitress import serve
 from modules import create_app
 from modules.functions import store_product, validate_URL, check_product_existence
-from modules.tasks import add, request_bol_data
+from modules.tasks import add, request_bol_data, scheduled_rescrape
 from modules.celery_utils import celery_init_app
 
 '''
@@ -53,10 +53,10 @@ def process_product_data(URL):
         log_to_file("Fetching product data with scraper API", "INFO", session["user_id"])
         
         # request_bol_data uses Celery to create a task queue to not overload the API
-        task_result = request_bol_data.delay(URL)
+        task_result = request_bol_data.apply_async(args=[URL], queue='user_requests')
         dictValues = task_result.get(timeout=15)
         if dictValues.get("error"):
-            log_to_file(f"API request error: {dictValues["error"]}", "ERROR", session["user_id"])
+            log_to_file(f"API request error: {dictValues}", "ERROR", session["user_id"])
             return False, None
             
         log_to_file(f"Product data fetched: {dictValues}", "INFO", session["user_id"])
@@ -234,9 +234,16 @@ def add_product():
     if request.method == "POST":
         URL = request.form.get("URL")
         
+        # Check of user has 5 products in table, if so alert user that the maximum amount is 5
+
+        
         if not validate_URL(URL):
             log_to_file(f"Invalid URL: {URL}", "ERROR", session["user_id"])
             return jsonify({"success": False, "message": "Invalid URL, please enter a valid bol.com Product URL."})
+        
+        query_result = db.session.query(UserProduct).filter_by(userID=session["user_id"]).all()
+        if len(query_result) >= 5:
+            return jsonify({"success": False, "message": "The maximum amount of items allowed at a time is 5. Please remove an item before adding a new one"})
         
         # Check if the requested product is already in the users table
         # If it is, alert the user and dont add it again
@@ -294,6 +301,12 @@ def remove_row():
         log_to_file(f"Product removed from userProducts table: {productData}", "INFO", session["user_id"])
         
         return redirect(url_for("index"))
+    return redirect(url_for("index"))
+
+
+@app.route('/test_scheduler', methods=["GET", "POST"])
+def test_scheduler():
+    scheduled_rescrape()
     return redirect(url_for("index"))
 
 

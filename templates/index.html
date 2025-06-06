@@ -23,35 +23,41 @@
     </div>
     
 
-        <div id="product-table-div">
-                <table id="product-table">
-                    <thead id="product-table-head">
-                    <tr>
-                        <th class="name-head" scope="col">Product</th>
-                        <th class="price-head" scope="col">Current price</th>
-                        <th class="price-head" scope="col">Original Price</th>
-                        <th class="price-head savings-head" scope="col">Savings</th>
-                    </tr>
-                    </thead>
-                        <tbody id="product-table-body">
-                            {% for product in products %}
-                            <tr class="product-row" id="product-{{ product.id }}">
-                                <td class="product-name-td"> 
-                                    <a target="_blank" class="product-name" id="name-{{ product.id }}" href="{{product["URL"]}}">{{product["name"]}}</a>
-                                    <button class="button remove-btn" id="remove-btn" onclick="remove_row(this)">Remove</button>
-                                </td>
-                                <td class="current-price" id="current-price-{{ product.id }}">{{ "€%.2f"|format(product["currentPrice"]) }}</td>
-                                <td class="og-price" id="og-price-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"]) }}</td>
-                                {% if (product["ogPrice"] - product["currentPrice"]) > 0 %}
-                                    <td class="savings-up" id="savings-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"] - product["currentPrice"]) }}</td>
-                                {% else %}
-                                    <td class="savings-down" id="savings-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"] - product["currentPrice"]) }}</td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                </table>
-            </div>
+    <div id="product-table-div">
+            <table id="product-table">
+                <thead id="product-table-head">
+                <tr>
+                    <th class="name-head" scope="col">Product</th>
+                    <th class="price-head" scope="col">Current price</th>
+                    <th class="price-head" scope="col">Original Price</th>
+                    <th class="price-head savings-head" scope="col">Savings</th>
+                </tr>
+                </thead>
+                    <tbody id="product-table-body">
+                        {% for product in products %}
+                        <tr class="product-row" id="product-{{ product.id }}">
+                            <td class="product-name-td"> 
+                                <a target="_blank" class="product-name" id="name-{{ product.id }}" href="{{product["URL"]}}">{{product["name"]}}</a>
+                                <button class="button remove-btn" id="remove-btn" onclick="remove_row(this)">Remove</button>
+                            </td>
+                            <td class="current-price" id="current-price-{{ product.id }}">{{ "€%.2f"|format(product["currentPrice"]) }}</td>
+                            <td class="og-price" id="og-price-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"]) }}</td>
+                            {% if (product["ogPrice"] - product["currentPrice"]) > 0 %}
+                                <td class="savings-up" id="savings-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"] - product["currentPrice"]) }}</td>
+                            {% else %}
+                                <td class="savings-down" id="savings-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"] - product["currentPrice"]) }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+            <p id="max-items-text">Max Items: 5</p>
+        </div>
+
+        <form method="POST" action="/test_scheduler">
+            <button>Test</button>
+        </form>
+
 
 
 
