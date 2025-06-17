@@ -69,14 +69,27 @@ function updateProductTable(product_data, tableBody){
     
     // Create currentPrice cell
     var currentPriceCell = document.createElement("td");
-    currentPriceCell.appendChild(document.createTextNode(`€${Number(product_data["currentPrice"]).toFixed(2)}`));
+    if (product_data["currentPrice"] > 0 ) {
+        currentPriceCell.appendChild(document.createTextNode(`€${Number(product_data["currentPrice"]).toFixed(2)}`));
+    } 
+    else {
+        currentPriceCell.appendChild(document.createTextNode("N/A"));
+    }
+
     currentPriceCell.setAttribute("class", "current-price");
     currentPriceCell.setAttribute("id", `current-price-${product_data["id"]}`);
     newRow.appendChild(currentPriceCell);
 
     // Create ogPrice cell
     var ogPriceCell = document.createElement("td");
-    ogPriceCell.appendChild(document.createTextNode(`€${Number(product_data["ogPrice"]).toFixed(2)}`));
+
+    if (product_data["ogPrice"] > 0 ) {
+        ogPriceCell.appendChild(document.createTextNode(`€${Number(product_data["ogPrice"]).toFixed(2)}`));
+    }
+    else {
+        ogPriceCell.appendChild(document.createTextNode("N/A"));
+    }
+
     ogPriceCell.setAttribute("class", "og-price");
     ogPriceCell.setAttribute("id", `og-price-${product_data["id"]}`);
     newRow.appendChild(ogPriceCell);

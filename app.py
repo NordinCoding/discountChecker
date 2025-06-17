@@ -54,19 +54,19 @@ def process_product_data(URL):
         
         # request_bol_data uses Celery to create a task queue to not overload the API
         task_result = request_bol_data.apply_async(args=[URL], queue='user_requests')
-        dictValues = task_result.get(timeout=15)
-        if dictValues.get("error"):
-            log_to_file(f"API request error: {dictValues}", "ERROR", session["user_id"])
+        dict_values = task_result.get(timeout=30)
+        if dict_values.get("error"):
+            log_to_file(f"API request error: {dict_values}", "ERROR", session["user_id"])
             return False, None
             
-        log_to_file(f"Product data fetched: {dictValues}", "INFO", session["user_id"])
+        log_to_file(f"Product data fetched: {dict_values}", "INFO", session["user_id"])
 
         # Add the product to the Products table in the database
         log_to_file("Adding product to products table", "INFO", session["user_id"])
 
-        store_product(dictValues, URL, session["user_id"])
+        store_product(dict_values, URL, session["user_id"])
             
-        return True, dictValues
+        return True, dict_values
     
     except TypeError as e:
         log_to_file(f"error processing data: {e}", "ERROR", session["user_id"])
@@ -79,32 +79,6 @@ def process_product_data(URL):
         return False, None
 
 
-# Scheduler for refreshing prices every 24 hours. Check refresh.py for the function
-'''
-    def scheduled_job():
-    with app.app_context():
-        refresh_prices()
-
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    refresh_prices,
-    'interval',
-    hours=24,
-    id='refresh_prices',
-    name='Refresh prices every 24 hours',
-)
-
-
-try:
-    scheduler.start()
-    log_to_file("Starting scheduler", "INFO")
-except Exception as e:
-    log_to_file(f"Error starting scheduler: {e}", "ERROR")
-    scheduler.shutdown()
-    log_to_file("Scheduler stopped", "ERROR")
-'''  
-
 
 @app.route('/', methods=["GET", "POST"])
 @login_required
@@ -116,12 +90,12 @@ def index():
     #print(task)
     
     # Get all the product IDs of the products from the users userProducts table to get the product data from the products table
-    userProductsRaw = db.session.query(UserProduct).filter_by(userID=session["user_id"]).all()
+    userProducts = db.session.query(UserProduct).filter_by(userID=session["user_id"]).all()
     products = []
     
-    # using userProductsRaw, Get the users product objects from the products table to push it to the front end
-    for userProductRaw in userProductsRaw:
-        product = db.session.query(Product).filter_by(id=userProductRaw.productID).first()
+    # using userProducts, Get the users product objects from the products table to push it to the front end
+    for userProduct in userProducts:
+        product = db.session.query(Product).filter_by(id=userProduct.productID).first()
         products.append(product)
         
     return render_template("index.html", products=products)
@@ -199,69 +173,45 @@ def logout():
 
 
 
-# Im pretty sure you can remove all of this, double check first tho
-# Make this happen every 24 or 12 hours for production mode, also remove refresh button
-'''
-@app.route('/api/refresh_prices', methods=["GET", "POST"])
-@login_required
-def refresh_prices():
-    products = db.session.query(Product).all()
-    productDicts = []
-    
-    # Loop through all the products in the database and update the prices
-    for product in products:
-        dictValues = bol_scraper(product.URL)
-        product.currentPrice = dictValues["currentPrice"]
-        product.ogPrice = dictValues["ogPrice"]
-        db.session.commit()
-    
-    # Get all the updated products and return them as a JSON object for the script
-    updated_products = db.session.query(Product).all()
-    for updated_product in updated_products:
-        productDict = {"id": updated_product.id, 
-                       "name": "updated_product.name", 
-                       "ogPrice": updated_product.ogPrice, 
-                       "currentPrice": updated_product.currentPrice}
-        productDicts += [productDict]
-        
-    return jsonify(productDicts)
-
-'''
-
-
 @app.route('/add_product', methods=["GET", "POST"])
 def add_product():
     if request.method == "POST":
         URL = request.form.get("URL")
         
-        # Check of user has 5 products in table, if so alert user that the maximum amount is 5
-
+        # Check count of amount of / in URL, if count exceeds 7, this means the URL has trailing data that changes often not needed to look up the product
+        # In this case remove the trailing data. Otherwise do nothing with the URL since its already formatted correctly
+        if URL.count('/') > 7:
+            url_last_slash = URL.rfind('/')
+            new_URL = URL[:url_last_slash]
+        else:
+            new_URL = URL
         
-        if not validate_URL(URL):
-            log_to_file(f"Invalid URL: {URL}", "ERROR", session["user_id"])
+        if not validate_URL(new_URL):
+            log_to_file(f"Invalid URL: {new_URL}", "ERROR", session["user_id"])
             return jsonify({"success": False, "message": "Invalid URL, please enter a valid bol.com Product URL."})
         
+        # Check of user has 5 products in table, if so alert user that the maximum amount is 5
         query_result = db.session.query(UserProduct).filter_by(userID=session["user_id"]).all()
         if len(query_result) >= 5:
             return jsonify({"success": False, "message": "The maximum amount of items allowed at a time is 5. Please remove an item before adding a new one"})
         
-        # Check if the requested product is already in the users table
+        # Check if the requested product is already in the Products table
         # If it is, alert the user and dont add it again
-        product = db.session.query(Product).filter_by(URL=URL).first()
+        product = db.session.query(Product).filter_by(URL=new_URL).first()
         if product:
-            if check_product_existence(URL, product.id, session["user_id"]):
+            if check_product_existence(new_URL, product.id, session["user_id"]):
                 return jsonify({"success": False, "message": "Product is already in your list."})
             
             # Otherwise, add product to userProducts table without requesting the API to avoid duplicates
             else:
-                return jsonify({"success": True, "message": "Product added successfully.", "product_data": {"URL": URL,
+                return jsonify({"success": True, "message": "Product added successfully.", "product_data": {"URL": new_URL,
                                                                                                             "id": product.id,
                                                                                                             "name": product.name,
                                                                                                             "currentPrice": product.currentPrice,
                                                                                                             "ogPrice": product.ogPrice}})
         
         # if the product does not exist in either tables, call process_propduct_data()
-        result, product_data = process_product_data(URL)
+        result, product_data = process_product_data(new_URL)
         
         # if it fails, pass the user a failure message
         if result == False:
@@ -283,27 +233,27 @@ def remove_row():
     if request.method == "POST":
         
         # get Product data from the JSON object sent from "index.html"
-        rowData = request.get_json()
-        log_to_file(f"Removing requested product: {rowData} from userProducts table", "INFO", session["user_id"])
+        row_data = request.get_json()
+        log_to_file(f"Removing requested product: {row_data} from userProducts table", "INFO", session["user_id"])
         
         # Look for the product in the database and remove it from the userProducts table using the data from the JSON object
         try:
-            print(rowData["name"])
-            productData = db.session.query(Product).filter_by(name=rowData["name"]).first()
-            print(productData.id)
-            db.session.query(UserProduct).filter_by(productID=productData.id, userID=session['user_id']).delete()
+            product_data = db.session.query(Product).filter_by(name=row_data["name"]).first()
+            print(product_data.id)
+            db.session.query(UserProduct).filter_by(productID=product_data.id, userID=session['user_id']).delete()
             db.session.commit()
             
         except Exception as e:
-            log_to_file(f"Error removing product: {rowData["name"]} from userProducts table: {e}", "ERROR", session["user_id"])
+            log_to_file(f"Error removing product: {row_data["name"]} from userProducts table: {e}", "ERROR", session["user_id"])
             return redirect(url_for("index"))
         
-        log_to_file(f"Product removed from userProducts table: {productData}", "INFO", session["user_id"])
+        log_to_file(f"Product removed from userProducts table: {product_data}", "INFO", session["user_id"])
         
         return redirect(url_for("index"))
     return redirect(url_for("index"))
 
 
+# Route used to test the 24H based scheduled rescrape of the Products table
 @app.route('/test_scheduler', methods=["GET", "POST"])
 def test_scheduler():
     scheduled_rescrape()

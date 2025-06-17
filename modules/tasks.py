@@ -5,6 +5,7 @@ from modules.helpers import log_to_file
 from modules.functions import rescrape_once, retry_scrape
 import requests
 import time
+import os
 
 # Task to test out concurrency
 @shared_task
@@ -26,26 +27,18 @@ def request_bol_data(URL):
     
     '''
     try:
-        print("requesting data")
-        response = requests.get(f"http://136.144.172.186/scrape?url={URL}")
+        response = requests.get(f"{os.getenv('API_IP')}/user_scrape/scrape?url={URL}")
         response.raise_for_status()
         dictValues = response.json()
         return dictValues
     
     except requests.exceptions.RequestException as e:
         return None
-    
-    
-
-@shared_task(name="scheduler_test")
-def scheduler_test():
-    for i in range(0, 5):
-        time.sleep(1)
-        
 
 
 @shared_task(name="scheduled_rescrape")
 def scheduled_rescrape():
+    print("starting rescrape")
     products = db.session.query(Product).all()
     for product in products:
         # Request API per product and catch errors

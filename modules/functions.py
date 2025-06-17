@@ -3,8 +3,11 @@ from modules.helpers import log_to_file
 from flask import jsonify
 import requests
 import time
+import os
 
-def store_product(dictValues, URL, user_id):
+
+
+def store_product(dict_values, URL, user_id):
     '''
     Function to store the newly scraped product into both the products table 
     and the userProducts table
@@ -15,22 +18,18 @@ def store_product(dictValues, URL, user_id):
         user_id: Holds the user_id of the current users session
     
     '''
-    try:
-        # Extract only neccessary parts of the URL to keep it consistent for future checking
-        url_last_slash = URL.rfind('/')
-        new_URL = URL[:url_last_slash]
-        
+    try: 
         # Create product object to store it in the products table
         product = Product(
-            URL=new_URL,
-            name=dictValues["name"],
-            ogPrice=dictValues["ogPrice"],
-            currentPrice=dictValues["currentPrice"]
+            URL=URL,
+            name=dict_values["name"],
+            ogPrice=dict_values["ogPrice"],
+            currentPrice=dict_values["currentPrice"]
         )
         db.session.add(product)
         db.session.commit()
         
-        log_to_file(f"Product added to products table: {dictValues}", "INFO", user_id)
+        log_to_file(f"Product added to products table: {dict_values}", "INFO", user_id)
         
         # create a userProduct object using the user_id and the product_id to store it to the userProducts table
         log_to_file("Adding product to userProducts table", "INFO", user_id)
@@ -80,7 +79,7 @@ def check_product_existence(URL, product_id, user_id):
         log_to_file(f"Product already exists in userProducts table: {URL}", "INFO", user_id)
         return True
             
-    # If product does exist in the products table but not in userProducts
+    # If product does exist in the Products table but not in the userProducts table
     # Add product to userProducts table without requesting the API to avoid duplicates
     else:
         userProduct = UserProduct(userID=user_id, productID=product_id)
@@ -101,7 +100,7 @@ def rescrape_once(URL, product_id):
     log_to_file(f"Requesting rescrape of product: {product_id}")
     
     try:
-        response = requests.get(f"http://136.144.172.186/scrape?url={URL}")
+        response = requests.get(f"{os.getenv('API_IP')}/scheduled_scrape/scrape?url={URL}")
         response.raise_for_status()
         dict_values = response.json()
         return dict_values

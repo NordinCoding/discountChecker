@@ -29,8 +29,8 @@ body {
 }
 
 #product-table {
-
-    width: 130%;
+    width: 100%;
+    min-width: 1100px;
     border-spacing: 0;
     border-collapse: separate;
     border-radius: 10px;

@@ -40,8 +40,14 @@
                                 <a target="_blank" class="product-name" id="name-{{ product.id }}" href="{{product["URL"]}}">{{product["name"]}}</a>
                                 <button class="button remove-btn" id="remove-btn" onclick="remove_row(this)">Remove</button>
                             </td>
-                            <td class="current-price" id="current-price-{{ product.id }}">{{ "€%.2f"|format(product["currentPrice"]) }}</td>
-                            <td class="og-price" id="og-price-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"]) }}</td>
+                            {% if product["currentPrice"] == 0 and product["ogPrice"] == 0 %}
+                                <td class="current-price" id="current-price-{{ product.id }}">N/A</td>
+                                <td class="og-price" id="og-price-{{ product.id }}">N/A</td>
+                            {% else %}
+                                <td class="current-price" id="current-price-{{ product.id }}">{{ "€%.2f"|format(product["currentPrice"]) }}</td>
+                                <td class="og-price" id="og-price-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"]) }}</td>
+                            {% endif %}
+
                             {% if (product["ogPrice"] - product["currentPrice"]) > 0 %}
                                 <td class="savings-up" id="savings-{{ product.id }}">{{ "€%.2f"|format(product["ogPrice"] - product["currentPrice"]) }}</td>
                             {% else %}

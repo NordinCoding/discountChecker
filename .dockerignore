@@ -1,4 +1,5 @@
 env/
-scraperlogs.txt
+scraper_logs.txt
+scraper_errors.txt
 devNotes.txt
 dailyNotes.txt
