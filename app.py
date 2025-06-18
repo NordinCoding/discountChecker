@@ -14,8 +14,8 @@ from modules.celery_utils import celery_init_app
 Flask back end application for the DiscountChecker web app.
 
 This application is responsible for handling user authentication, database management, product data processing and scheduling API requests.
-It uses Flask for the web framework, SQLAlchemy for database management, and APScheduler for scheduling tasks.
-This application communicates with my scraper API running on a VPS to fetch product data from the desired webshops through URLs.
+It uses Flask for the web framework, SQLAlchemy for database management and redis + Celery beat for scheduling tasks and rate limiting API requests.
+This application communicates with my scraper APIs running on a VPS to fetch product data from the desired webshops through URLs.
 The application is designed to be run in a production environment using Waitress as the WSGI server, however
 it is not meant for mass use, since I am not financially capable to support a large amount of users.
 This program is purely a portfolio piece to show off what I have learned and what I am capable of.
