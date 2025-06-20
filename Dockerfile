@@ -18,7 +18,7 @@ ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 
-EXPOSE 5000
+EXPOSE 80
 
 # For development
 CMD ["python", "-u" ,"app.py"]
