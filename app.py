@@ -33,7 +33,7 @@ celery = celery_init_app(app)
 log_to_file("App started", "INFO")
 
 
-print("test")
+print("testing")
 
 def process_product_data(URL):
     
