@@ -4,7 +4,6 @@ env/
 .env
 scraper_logs.txt
 scraper_errors.txt
-docker-compose.override.yml
 .vscode/
 .idea/
 devNotes.txt
