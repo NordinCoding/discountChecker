@@ -4,8 +4,16 @@ env/
 .env
 scraper_logs.txt
 scraper_errors.txt
+<<<<<<< HEAD
+=======
+docker-compose.yml
+>>>>>>> 802ca1637f96ff70e1b8471699f2ff8856622ffc
 .vscode/
 .idea/
 devNotes.txt
 dailyNotes.txt
 backups/
+<<<<<<< HEAD
+=======
+Dockerfile
+>>>>>>> 802ca1637f96ff70e1b8471699f2ff8856622ffc
