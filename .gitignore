@@ -4,8 +4,6 @@ env/
 .env
 scraper_logs.txt
 scraper_errors.txt
-docker-compose.yml
-Dockerfile
 .vscode/
 .idea/
 devNotes.txt

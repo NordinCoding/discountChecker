@@ -9,9 +9,9 @@ app = create_app()
 celery = celery_init_app(app)
 
 celery.conf.beat_schedule = {
-    'run-every-day-at-3am': {
+    'run-every-tuesday-at-3am': {
         'task': 'scheduled_rescrape',
-        'schedule': crontab(hour=3, minute=0),
+        'schedule': crontab(hour=3, minute=0, day_of_week=2),
         'options': {'queue': 'scheduled_task'}
     }
 }

@@ -1,5 +1,3 @@
-/* Index.html */
-
 body {
     background-color: #f1eadd;
 }
@@ -119,6 +117,17 @@ tr:nth-child(even) {
     height: 50px;
 }
 
+.remove-btn {
+    float: right;
+    font-size: 15px;
+    width: 12%;
+}
+
+/* PRODUCT TABLE */
+
+
+
+
 #input-box-div {
     display: flex;
     justify-content: center;
@@ -135,10 +144,7 @@ tr:nth-child(even) {
     justify-content: center;
 }
 
-#insert-message-div {
-    display: flex;
-    justify-content: center;
-}
+
 
 input {
     background-color: #f9f7f2;
@@ -174,6 +180,11 @@ input {
     top: 13%;
 }
 
+#insert-message-div {
+    display: flex;
+    justify-content: center;
+}
+
 #feedback-message {
     position: absolute;
     top: 22.5%;
@@ -195,12 +206,6 @@ input {
     top: 125%;
     width: 10%;
     font-size: 17px;
-}
-
-.remove-btn {
-    float: right;
-    font-size: 15px;
-    width: 12%;
 }
 
 .spinner-image {
@@ -229,49 +234,31 @@ input {
     font-size: 115%;
 }
 
+
+
 /* REGISTER.HTML */
 
-.centered-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.centered-input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#username {
-    position: absolute;
-    top: 17%;
-}
-
-#password {
-    position: absolute;
-    top: 19.5%;
-}
-
-#confirmation {
-    position: absolute;
-    top: 22%;
-}
-
-#register-button {
-    position: absolute;
-    top: 25.5%;
+#registration-form {
+    text-align: center;
 }
 
 #register-head {
-    position: absolute;
-    top: 11.5%;
     color: Black;
+    margin-bottom: 15px;
+}
+
+#register-password, #register-confirmation, #register-username {
+    margin-bottom: 5px;
+    width: 11vw;
+    max-width: 210px;
+    min-width: 170px;
+}
+
+#register-button {
+    margin-top: 10px;
 }
 
 #register-feedback-msg {
-    position: absolute;
-    top: 28.5%;
     transition: opacity 1s ease-out;
     color: red;
 }
@@ -282,35 +269,54 @@ input {
 
 /* LOGIN.HTML */
 
+.centered-div {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    margin-top: 5%;
+}
+
+#login-form {
+    text-align: center;
+}
+
 #login-head {
-    position: absolute;
-    top: 11.5%;
     color: black;
+    margin-bottom: 15px;
 }
 
-#login-username {
-    position: absolute;
-    top: 17%;
-}
-
-#login-password {
-    position: absolute;
-    top: 19.5%;
+#login-username, #login-password {
+    margin-bottom: 5px;
+    width: 11vw;
+    max-width: 210px;
+    min-width: 170px;
 }
 
 #login-button {
-    position: absolute;
-    top: 23%;
+    margin-top: 10px;
 }
 
 #login-feedback-msg {
-    position: absolute;
-    top: 26%;
     transition: opacity 1s ease-out;
     color: red;
+    margin-top: 10px;
 }
 
 /* LOGIN.HTML */
 
 
 
+/*
+UNCOMMENT THIS TO CREATE A LINE IN THE MIDDLE
+body::before {
+    content: '';
+    position: fixed;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: red;
+    z-index: 9999;
+}
+*/

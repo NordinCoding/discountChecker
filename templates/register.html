@@ -6,13 +6,17 @@
         <form id="registration-form" action="/register" method="POST">
             <div id="register-input" class="centered-input">
                 <h1 id="register-head">Create Account</h1>
-                <br>
-                <input class="username-input" id="username" type="text" name="username" placeholder="Username">
-                <br>
-                <input class="password-input" id="password" type="password" name="password" placeholder="Password">
-                <br>
-                <input class="password-input" id="confirmation" type="password" name="confirmation" placeholder="Confirm Password">
-                <br>
+            </div>
+            <div class="username-div">
+                <input class="username-input" id="register-username" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="password-div">
+                <input class="password-input" id="register-password" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="confirmation-div">
+                <input class="password-input" id="register-confirmation" type="password" name="confirmation" placeholder="Confirm Password">
+            </div>
+            <div>
                 <button class="button" id = "register-button" type="SUBMIT">Create account</button>
             </div>
         </form>
