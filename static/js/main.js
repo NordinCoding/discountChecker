@@ -1,7 +1,7 @@
 function remove_row(button) {
     var row = button.closest('tr')
     var rowData = { name: row.querySelector('.product-name').innerText }
-    fetch('/remove_row', {
+    fetch(`${window.urlPrefix}/remove_row`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

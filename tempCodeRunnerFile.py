@@ -1,1 +1,0 @@
-return jsonify({"success": False, "success-message": "Invalid URL, please enter a valid bol.com Product URL."})

@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, jsonify, url_for
 from flask_session import Session
+from werkzeug.middleware.proxy_fix import ProxyFix
 from modules.models import User, UserProduct, Product, db
 from modules.celery_utils import celery_init_app
 from dotenv import load_dotenv
@@ -32,5 +33,13 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-        
-    return app
+
+    if os.getenv("USE_PROXY_FIX") == "true":
+        app.wsgi_app = ProxyFix(
+            app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+        )
+    
+    @app.context_processor
+    def change_url_prefix():
+        return {"url_prefix": os.getenv("BASE_URL", "")}
+    return app 

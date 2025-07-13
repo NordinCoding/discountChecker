@@ -8,6 +8,7 @@ from modules import create_app
 from modules.functions import store_product, validate_URL, check_product_existence
 from modules.tasks import add, request_bol_data, scheduled_rescrape
 from modules.celery_utils import celery_init_app
+import os
 
 '''
 
@@ -32,8 +33,8 @@ celery = celery_init_app(app)
 
 log_to_file("App started", "INFO")
 
-
-print("testing")
+# Set base URL for redirects, the URL is different in production.
+BASE_URL = os.getenv("BASE_URL", "")
 
 def process_product_data(URL):
     
@@ -121,7 +122,7 @@ def register():
         db.session.commit()
         
         log_to_file(f"User registered succesfully: {name}", "INFO")
-        return redirect(url_for("login"))
+        return redirect(f"{BASE_URL}/login")
     return render_template("register.html")
 
 
@@ -160,7 +161,7 @@ def login():
         else:
             session["user_id"] = user.id
             log_to_file(f"User logged in: {username}", "INFO", session["user_id"])
-            return jsonify({"success":True, "redirect": "/"})
+            return jsonify({"success":True, "redirect": f"{BASE_URL}/"})
     
     return render_template("login.html")
 
@@ -171,7 +172,7 @@ def logout():
     log_to_file("Logging out user", "INFO", session["user_id"])
     
     session.clear()
-    return redirect(url_for("login"))
+    return redirect(f"{BASE_URL}/login")
 
 
 
@@ -226,7 +227,7 @@ def add_product():
         log_to_file(f"Product added succesfully", "INFO", session["user_id"])
         return jsonify({"success": True, "message": "Product added successfully.", "product_data": product_data})
             
-    return redirect(url_for("index"))
+    return redirect(f"{BASE_URL}/")
 
 
 # Remove row from the database when user clicks 'remove' button
@@ -247,19 +248,19 @@ def remove_row():
             
         except Exception as e:
             log_to_file(f"Error removing product: {row_data["name"]} from userProducts table: {e}", "ERROR", session["user_id"])
-            return redirect(url_for("index"))
+            return redirect(f"{BASE_URL}/")
         
         log_to_file(f"Product removed from userProducts table: {product_data}", "INFO", session["user_id"])
         
-        return redirect(url_for("index"))
-    return redirect(url_for("index"))
+        return redirect(f"{BASE_URL}/")
+    return redirect(f"{BASE_URL}/")
 
 
 # Route used to test the 24H based scheduled rescrape of the Products table
 @app.route('/test_scheduler', methods=["GET", "POST"])
 def test_scheduler():
     scheduled_rescrape()
-    return redirect(url_for("index"))
+    return redirect(f"{BASE_URL}/")
 
 
 mode = "dev"

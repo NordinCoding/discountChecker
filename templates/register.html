@@ -26,7 +26,7 @@
     <script>
 
         async function checkUsername(username) {
-            const response = await fetch('/check_username', {
+            const response = await fetch(`${window.urlPrefix}/check_username`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,9 +43,9 @@
             event.preventDefault();
 
             let isValid = true;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const confirmation = document.getElementById('confirmation').value;
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const confirmation = document.getElementById('register-confirmation').value;
             const messageDiv = document.getElementById('register-feedback-msg');
             const submitButton = document.getElementById('register-button');
 
