@@ -1,0 +1,100 @@
+main.js 
+	line 4
+		prod: fetch('/discount-checker/remove_row'
+		dev: fetch('/remove_row'
+
+
+
+login.html
+	line 27
+		prod: const response = await fetch('/discount-checker/login'
+		dev: const response = await fetch('/login'
+
+
+register.html
+	line 29
+		prod: const response = await fetch('/discount-checker/check_username'
+		dev: const response = await fetch('/check_username'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.html 
+	line 14
+		prod: <img src="static/images/spinner.png" alt="loading..." class="spinner-image">
+		dev: <img src="../static/images/spinner.png" alt="loading..." class="spinner-image">
+
+
+base.html 
+	line 14
+		prod: <link href="static/css/main.css" rel="stylesheet">
+		dev: <link href="../static/css/main.css" rel="stylesheet">
+	
+
+
+	line 45
+		prod: <script src="static/js/main.js"></script>
+		dev: <script src="../static/js/main.js"></script>
+
+
+base.html
+	line 24, 32, 36, 37, 45
+		add "/discount-checker" in every href
+
+
+helpers.py 
+	line 15
+		prod: return redirect("/discount-checker/login")
+		dev: return redirect(url_for("login"))
+
+
+__init__.py
+	line 38:
+		prod: 
+			from werkzeug.middleware.proxy_fix import ProxyFix
+
+		      app.wsgi_app = ProxyFix(
+        		  app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+    		      )
+
+		dev: nothing
+
+		
+		set USE_PROXY_FIX to false in dev, true in prod
+
+app.py
+	line 162
+		prod: return jsonify({"success":True, "redirect": "/discount-checker/"})
+		dev: return jsonify({"success":True, "redirect": "/"})
+
+	line 173
+		prod: return redirect("/discount-checker/login")
+		dev: return redirect("login")
+
+	line 253
+		prod: return redirect("discount-checker/")
+		dev: return redirect("/")

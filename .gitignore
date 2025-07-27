@@ -5,6 +5,8 @@ init.sql/
 *.pyc
 env/
 .env
+.env.dev
+.env.prod
 scraper_logs.txt
 scraper_errors.txt
 docker-compose.yml

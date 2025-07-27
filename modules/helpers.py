@@ -3,6 +3,7 @@ from flask import session, redirect, url_for, render_template
 import datetime
 import os
 
+BASE_URL = os.getenv("BASE_URL", "")
 
 def login_required(f):
     '''
@@ -13,7 +14,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if session.get("user_id") is None:
-            return redirect(f"{os.getenv("BASE_URL")}/login")
+            return redirect(f"{BASE_URL}/login")
         return f(*args, **kwargs)
     return decorated_function
 

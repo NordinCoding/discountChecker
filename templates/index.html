@@ -11,7 +11,7 @@
                 <input id="URL-input" type="text" name="URL">
                 <button class="button" id="submit-btn" type="submit">Check</button>
                 <div id="loading-spinner" style="size: 10px;">
-                    <img src="/static/images/spinner.png" alt="loading..." class="spinner-image">
+                    <img src="{{ url_prefix }}/static/images/spinner.png" alt="loading..." class="spinner-image">
                 </div>
             </div>
         </form>
@@ -19,7 +19,8 @@
     </div>
     <div id="supported-websites-div">
         <H6>Supported websites:</H1>
-        <a id="bol-link" target="_blank" href="https://www.bol.com/nl/nl/">Bol.com</a>
+        <a id="bol-link" target="_blank" href="https://www.bol.com/nl/nl/">Bol.com</a><br>
+        <a id="mediamarkt-link" target="_blank" href="https://www.mediamarkt.nl/nl/">MediaMarkt.nl</a>
     </div>
     
 
@@ -35,10 +36,20 @@
                 </thead>
                     <tbody id="product-table-body">
                         {% for product in products %}
-                        <tr class="product-row" id="product-{{ product.id }}">
-                            <td class="product-name-td"> 
-                                <a target="_blank" class="product-name" id="name-{{ product.id }}" href="{{product["URL"]}}">{{product["name"]}}</a>
-                                <button class="button remove-btn" id="remove-btn" onclick="remove_row(this)">Remove</button>
+                            <td class="product-name-td">
+                                <span class="website-name">
+                                    {% if "mediamarkt"  in product["URL"] %}
+                                        <a target="_blank" href="https://www.mediamarkt.nl/nl/"><strong>[MediaMarkt]</strong></a>
+                                    {% else %}
+                                        <a target="_blank" href="https://www.bol.com/nl/nl/"><strong>[Bol.com]</strong></a>
+                                    {% endif %}
+                                </span>
+                                <a 
+                                    target="_blank" class="product-name" id="name-{{ product.id }}" href="{{product["URL"]}}">{{product["name"]}}
+                                </a>
+                                <button 
+                                    class="button remove-btn" id="remove-btn" onclick="remove_row(this)">Remove
+                                </button>
                             </td>
                             {% if product["currentPrice"] == 0 and product["ogPrice"] == 0 %}
                                 <td class="current-price" id="current-price-{{ product.id }}">N/A</td>
@@ -60,10 +71,6 @@
             <p id="max-items-text">Max Items: 5</p>
         </div>
 
-        <form method="POST" action="/test_scheduler">
-            <button>Test</button>
-        </form>
-
 
 
 
@@ -83,7 +90,7 @@
 
         const formData = new FormData(this);
 
-        fetch('/add_product', {
+        fetch(`${window.urlPrefix}/add_product`, {
             method: 'POST',
             body: formData
         })

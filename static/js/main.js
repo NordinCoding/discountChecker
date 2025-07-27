@@ -40,6 +40,13 @@ window.fadeOut = fadeOut
 
 
 function updateProductTable(product_data, tableBody){
+    if (product_data["URL"].includes("mediamarkt")){
+        var mediamarktBool = true
+    }
+    else {
+        var mediamarktBool = false
+    }
+
     // Create new row in productTable to show the newly gathered data
     var newRow = document.createElement("tr");
     newRow.setAttribute("id", `product-${product_data["id"]}`);
@@ -50,6 +57,37 @@ function updateProductTable(product_data, tableBody){
     var nameCell = document.createElement("td");
     nameCell.setAttribute("class", "product-name-td");
     
+    // Create span element for the websites URL to store in nameCell
+    var strongName = document.createElement("strong");
+
+    // Change website name based on previously set boolean
+    if (mediamarktBool === true) {
+        strongName.appendChild(document.createTextNode("[MediaMarkt]"))
+    }
+    else{
+        strongName.appendChild(document.createTextNode("[Bol.com]"))
+    }
+
+    // Create hyperlink element for the website href
+    var websiteLink = document.createElement("a");
+    websiteLink.setAttribute("target", "_blank");
+
+    if (mediamarktBool === true){
+        websiteLink.setAttribute("href", "https://www.mediamarkt.nl/nl/")
+    }
+    else{
+        websiteLink.setAttribute("href", "https://www.bol.com/nl/nl/")     
+    }
+
+    // Create span element for the website name/link
+    var websiteSpan = document.createElement("span");
+    websiteSpan.setAttribute("class", "website-name")
+
+    websiteLink.appendChild(strongName)
+    websiteSpan.appendChild(websiteLink)
+    nameCell.appendChild(websiteSpan)
+
+
     // Create hyperlink element for the products URL to store in nameCell
     var urlCell = document.createElement("a");
     urlCell.appendChild(document.createTextNode(product_data["name"]));

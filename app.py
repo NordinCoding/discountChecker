@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from modules.helpers import login_required, log_to_file
 from waitress import serve
 from modules import create_app
-from modules.functions import store_product, validate_URL, check_product_existence
+from modules.functions import store_product, validate_URL, check_product_existence, remove_trailing_data
 from modules.tasks import add, request_bol_data, scheduled_rescrape
 from modules.celery_utils import celery_init_app
 import os
@@ -181,13 +181,11 @@ def add_product():
     if request.method == "POST":
         URL = request.form.get("URL")
         
-        # Check count of amount of / in URL, if count exceeds 7, this means the URL has trailing data that changes often not needed to look up the product
+        # Check count of amount of / in URL, if count exceeds 7, this means the URL has trailing data that changes often, not needed to look up the product
         # In this case remove the trailing data. Otherwise do nothing with the URL since its already formatted correctly
-        if URL.count('/') > 7:
-            url_last_slash = URL.rfind('/')
-            new_URL = URL[:url_last_slash]
-        else:
-            new_URL = URL
+        log_to_file(f"Removing trailing data if it exists from: {URL}")
+        new_URL = remove_trailing_data(URL)
+        log_to_file(f"New URL: {new_URL}")
         
         if not validate_URL(new_URL):
             log_to_file(f"Invalid URL: {new_URL}", "ERROR", session["user_id"])

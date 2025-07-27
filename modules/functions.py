@@ -54,17 +54,46 @@ def validate_URL(URL):
     
     '''
     
-    valid_URLs = ["https://www.bol.com/nl/nl/p",
-                  "https://www.bol.com/be/nl/p",
-                  "https://www.bol.com/nl/fr/p",
-                  "https://www.bol.com/be/fr/p"]
+    valid_domains = [   "bol.com/",
+                        "mediamarkt.nl/"
+                        ]
     
-    for URL_check in valid_URLs:
-        if URL_check in URL:
+    for domain in valid_domains:
+        if domain in URL:
             return True
     return False
 
 
+
+def remove_trailing_data(URL):
+    
+    # If bol.com is in the URL, check for trailing data indictator '/?', if spotted, remove trailing data and return new URL, if not, return URL
+    URL = URL.strip().lower()
+    
+    if ("bol.com/" in URL):
+        url_last_slash = URL.rfind('/?')
+        if url_last_slash >= 0:
+            URL = URL[:url_last_slash]
+    
+    # else if either coolblue.nl/ or coolblue.be/ are in the URL, find the last slash in the URL, check if trailing data is numeric
+    # If not numeric, its trailing data, remove trailing data and return, else its numeric(product ID), return URL as is
+    
+    # COOLBLUE SCRAPER DOESNT WORK IN PROD DUE TO GOOD BOT DETECTION FROM COOLBLUE
+    
+    '''
+    elif "coolblue.nl/" in URL or "coolblue.be/" in URL:
+        url_last_slash = URL.rfind('/')
+        if URL[url_last_slash:].strip('/').isnumeric() == False:
+            URL = URL[:url_last_slash]
+    '''
+            
+    # Mediamarkt URLs arnt handled since they dont have any trailing data
+    
+    # Standarise URLs by adding https://www. if not already included, this helps deduplication logic stay consistent
+    if not URL.startswith("http"):
+        URL = "https://www." + URL
+    return URL
+        
 
 
 def check_product_existence(URL, product_id, user_id):
