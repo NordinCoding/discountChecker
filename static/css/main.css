@@ -232,6 +232,7 @@ input {
 
 #insert-message {
     font-size: 115%;
+    font-weight: 500;
 }
 
 
@@ -261,6 +262,11 @@ input {
 #register-feedback-msg {
     transition: opacity 1s ease-out;
     color: red;
+}
+
+#disclaimer-div {
+    margin-top: 2rem;
+    text-align: center;
 }
 
 /* REGISTER.HTML */
@@ -301,6 +307,12 @@ input {
     transition: opacity 1s ease-out;
     color: red;
     margin-top: 10px;
+}
+
+#make-account-div {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 1rem;
 }
 
 /* LOGIN.HTML */

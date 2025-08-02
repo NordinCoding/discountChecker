@@ -157,7 +157,7 @@ def login():
         # Check if user exists and if the password is correct
         # Password comes directly from the form, as to never store it in a variable
         if user is None or not check_password_hash(user.passwordHash, data.get("password")):
-            return jsonify({"success":False, "message":"Invalid username or password"})
+            return jsonify({"success":False, "message":"Invalid username and/or password"})
         else:
             session["user_id"] = user.id
             log_to_file(f"User logged in: {username}", "INFO", session["user_id"])
@@ -189,7 +189,7 @@ def add_product():
         
         if not validate_URL(new_URL):
             log_to_file(f"Invalid URL: {new_URL}", "ERROR", session["user_id"])
-            return jsonify({"success": False, "message": "Invalid URL, please enter a valid bol.com Product URL."})
+            return jsonify({"success": False, "message": "Invalid URL, please enter a valid Product URL."})
         
         # Check of user has 5 products in table, if so alert user that the maximum amount is 5
         query_result = db.session.query(UserProduct).filter_by(userID=session["user_id"]).all()
@@ -221,7 +221,7 @@ def add_product():
                             "message": "Error processing product data, please check if the URL you entered is an available product"})
         
         # if it succeeds, pass the user success message and send the product data to the script in "index.html"
-        product_data["URL"] = URL
+        product_data["URL"] = new_URL
         log_to_file(f"Product added succesfully", "INFO", session["user_id"])
         return jsonify({"success": True, "message": "Product added successfully.", "product_data": product_data})
             
