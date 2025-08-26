@@ -172,8 +172,12 @@ function emptyTableMessage(tableBody) {
     emptyTableCell.setAttribute("id", "empty-table-Cell")
     emptyTableCell.setAttribute("colspan", "4")
 
-    // Populate table body with the new row and cell that includes a message
-    emptyTableCell.appendChild(document.createTextNode("This table is empty. Add a product by giving the text box above a URL"));
+    // Populate table body with the new row 
+    // and cell that includes a message
+    emptyTableCell.appendChild(document.createTextNode(
+        "This table is empty. \
+        Add a product by giving the text box above a URL"
+    ));
     emptyTableRow.appendChild(emptyTableCell);
     tableBody.appendChild(emptyTableRow);
 }

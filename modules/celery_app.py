@@ -16,4 +16,10 @@ celery.conf.beat_schedule = {
     }
 }
 
-print("Beat schedule:", celery.conf.beat_schedule)
+celery.conf.beat_schedule = {
+    'run-every-day-besides-tuesday-at-3am': {
+        'task': 'scheduled__user_rescrape',
+        'schedule': crontab(hour=3, minute=0, day_of_week='0, 1, 3, 4, 5, 6'),
+        'options': {'queue': 'scheduled_task'}
+    }
+}

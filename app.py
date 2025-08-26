@@ -1,12 +1,13 @@
 from flask import Flask, flash, redirect, render_template, request, session, jsonify, url_for
+from sqlalchemy import select
 from werkzeug.security import check_password_hash, generate_password_hash
 from modules.models import User, UserProduct, Product, db
 from flask_sqlalchemy import SQLAlchemy
 from modules.helpers import login_required, log_to_file
 from waitress import serve
 from modules import create_app
-from modules.functions import store_product, validate_URL, check_product_existence, remove_trailing_data
-from modules.tasks import add, request_bol_data, scheduled_rescrape
+from modules.functions import store_product, validate_URL, check_product_existence, standardise_URL
+from modules.tasks import add, request_API, scheduled_rescrape, scheduled_user_rescrape
 from modules.celery_utils import celery_init_app
 import os
 
@@ -55,8 +56,8 @@ def process_product_data(URL):
         # Fetch the product data from the scraper API and store it in a dictionary, raise for HTTP errors
         log_to_file("Fetching product data with scraper API", "INFO", session["user_id"])
         
-        # request_bol_data uses Celery to create a task queue to not overload the API
-        task_result = request_bol_data.apply_async(args=[URL], queue='user_requests')
+        # request_API uses Redis/Celery to create a task queue to not overload the API
+        task_result = request_API.apply_async(args=[URL], queue='user_requests')
         dict_values = task_result.get(timeout=30)
         if dict_values.get("error"):
             log_to_file(f"API request error: {dict_values}", "ERROR", session["user_id"])
@@ -86,7 +87,6 @@ def process_product_data(URL):
 @app.route('/', methods=["GET", "POST"])
 @login_required
 def index():
-
     log_to_file(f"Loading index", "INFO", session["user_id"])
     # Uncomment to test Celery worker
     #task = add.delay(5, 5)
@@ -184,7 +184,7 @@ def add_product():
         # Check count of amount of / in URL, if count exceeds 7, this means the URL has trailing data that changes often, not needed to look up the product
         # In this case remove the trailing data. Otherwise do nothing with the URL since its already formatted correctly
         log_to_file(f"Removing trailing data if it exists from: {URL}")
-        new_URL = remove_trailing_data(URL)
+        new_URL = standardise_URL(URL)
         log_to_file(f"New URL: {new_URL}")
         
         if not validate_URL(new_URL):

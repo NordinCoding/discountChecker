@@ -54,9 +54,10 @@ def validate_URL(URL):
     
     '''
     
-    valid_domains = [   "bol.com/",
-                        "mediamarkt.nl/"
-                        ]
+    valid_domains = [
+        "bol.com/",
+        "mediamarkt.nl/"
+    ]
     
     for domain in valid_domains:
         if domain in URL:
@@ -65,7 +66,7 @@ def validate_URL(URL):
 
 
 
-def remove_trailing_data(URL):
+def standardise_URL(URL):
     
     # If bol.com is in the URL, check for trailing data indictator '/?', if spotted, remove trailing data and return new URL, if not, return URL
     URL = URL.strip().lower()
@@ -78,7 +79,8 @@ def remove_trailing_data(URL):
     # else if either coolblue.nl/ or coolblue.be/ are in the URL, find the last slash in the URL, check if trailing data is numeric
     # If not numeric, its trailing data, remove trailing data and return, else its numeric(product ID), return URL as is
     
-    # COOLBLUE SCRAPER DOESNT WORK IN PROD DUE TO GOOD BOT DETECTION FROM COOLBLUE
+    # Coolblue scraper works perfectly locally, but gets caught by bot detection in production.
+    # I will try to break through someday which is why im keeping this part here
     
     '''
     elif "coolblue.nl/" in URL or "coolblue.be/" in URL:
