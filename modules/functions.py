@@ -146,7 +146,6 @@ def retry_scrape(URL, product_id):
     
     # Request API in loop to retry the scrape twice
     for i in range (0, 2):
-        
         if i == 0:
             log_to_file(f"1st retry on product: {product_id}")
         else:
@@ -159,7 +158,7 @@ def retry_scrape(URL, product_id):
         if dict_values.get('currentPrice'):
             return dict_values
         
-        # if loop is on second try and doesnt contain the key 'currentPrice',
+        # if the loop is on the second try and doesnt contain the key 'currentPrice',
         # the scraping failed twice, return dict_values that contains error message
         if i == 1:
             return dict_values
