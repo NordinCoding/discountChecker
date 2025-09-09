@@ -16,10 +16,18 @@
             <div class="confirmation-div">
                 <input class="password-input" id="register-confirmation" type="password" name="confirmation" placeholder="Confirm Password">
             </div>
+            <div
+                class="cf-turnstile" 
+                data-sitekey="0x4AAAAAAB0QEtsBQZNOZgct"
+                data-theme="light"
+                data-size="normal"
+                data-callback="onSuccess"
+            ></div>
             <div>
                 <button class="button" id = "register-button" type="SUBMIT">Create account</button>
             </div>
         </form>
+        
         <div id="register-feedback-msg"></div>
         <div id="disclaimer-div">
             <p>
@@ -57,7 +65,6 @@
 
             const validUsername = /^[0-9A-Za-z]{6,16}$/;
             const validPassword = /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/;
-            
 
             let response = await checkUsername(username);
             if (response.exists) {
@@ -89,5 +96,6 @@
             }
         });
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 {% endblock %}

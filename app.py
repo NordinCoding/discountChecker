@@ -3,7 +3,7 @@ from sqlalchemy import select
 from werkzeug.security import check_password_hash, generate_password_hash
 from modules.models import User, UserProduct, Product, db
 from flask_sqlalchemy import SQLAlchemy
-from modules.helpers import login_required, log_to_file
+from modules.helpers import login_required, log_to_file, validate_turnsrtile
 from waitress import serve
 from modules import create_app
 from modules.functions import store_product, validate_URL, check_product_existence, standardise_URL
@@ -110,19 +110,33 @@ def register():
     session.clear()
     log_to_file("Loading register page", "INFO")
     
+    token = request.form.get('cf-turnstile-response')
+    remoteip = request.headers.get('CF-connecting-IP') or \
+            request.headers.get('X-Forwarded-For') or \
+            request.remote_addr
+            
+    validation = validate_turnsrtile(
+                                token, 
+                                os.getenv('TURNSTILE_SECRET_KEY'),
+                                remoteip)
+    
     # Registers the user in the database and encrypt password,
     # checking if user already exists is done with JS in "register.html" and the check_username() function
     # authentication is done with JS in "register.html"
     if request.method == "POST":
-        name = request.form.get("username")
-        passwordHash = generate_password_hash(request.form.get("password"), method='pbkdf2', salt_length=16)
-        user = User(username=name, passwordHash=passwordHash)
+        if validation['success']:
+            name = request.form.get("username")
+            passwordHash = generate_password_hash(request.form.get("password"), method='pbkdf2', salt_length=16)
+            user = User(username=name, passwordHash=passwordHash)
+            
+            db.session.add(user)
+            db.session.commit()
+            
+            log_to_file(f"User registered succesfully: {name}", "INFO")
+            return redirect(f"{BASE_URL}/login")
+        else:
+            return render_template("register.html")
         
-        db.session.add(user)
-        db.session.commit()
-        
-        log_to_file(f"User registered succesfully: {name}", "INFO")
-        return redirect(f"{BASE_URL}/login")
     return render_template("register.html")
 
 

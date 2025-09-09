@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import session, redirect, url_for, render_template
 import datetime
+import requests
 import os
 
 BASE_URL = os.getenv("BASE_URL", "")
@@ -44,3 +45,22 @@ def log_to_file(message, level="INFO", user_id=None):
     with open("scraper_logs.txt", "a", encoding="utf-8") as file:
         file.write(log_entry)
             
+            
+def validate_turnsrtile(token, secret, remoteip=None):
+    url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+    
+    data = {
+        'secret': secret,
+        'response': token
+    }
+    
+    if remoteip:
+        data['remoteip'] = remoteip
+        
+    try:
+        response = requests.post(url, data=data, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        log_to_file(f"Turnstile validation error: {e}")
+        return {'success': False, 'error-codes': ['internal-error']}
